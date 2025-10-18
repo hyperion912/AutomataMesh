@@ -9,6 +9,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from '@/components/ui/button';
 import { toast } from "sonner";
 
+/**
+ * Client-side page component that displays fetched workflows and provides a button to create a new workflow.
+ *
+ * Renders the current workflows (from TRPC) and a "Create Workflow" button that triggers a TRPC mutation; on successful creation a success toast ("Job queued") is shown.
+ *
+ * @returns The component's JSX element tree rendering workflow data and controls.
+ */
 export default function Home() {
   const trpc = useTRPC();
   const {data} = useQuery(trpc.getWorkflows.queryOptions());
