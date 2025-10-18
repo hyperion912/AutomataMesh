@@ -28,38 +28,45 @@ import {
 
 import { Input } from "@/components/ui/input"
 
-const loginSchema = z.object({
+const registerSchema = z.object({
     email: z.email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 characters")
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, "Password must be at least 8 characters")
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"]
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>;
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const router = useRouter();
 
-    const form = useForm<LoginFormValues>({
-        resolver: zodResolver(loginSchema),
+    const form = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
             email: "",
-            password: ""
+            password: "",
+            confirmPassword: ""
         }
     });
 
-    const onSubmit = async (values: LoginFormValues) => {
-         await authClient.signIn.email({
-            email: values.email,
-            password: values.password,
-            callbackURL: "/"
+    const onSubmit = async (values: RegisterFormValues) => {
+       await authClient.signUp.email({
+        name: values.email,
+        email: values.email,
+        password: values.password,
+        callbackURL: "/"
+       },
+       {
+        onSuccess: () => {
+            router.push("/");
         },
-        {
-            onSuccess: () => {
-                router.push("/");
-            },
-            onError: (ctx) => { 
-                toast.error(ctx.error.message);
-            }
-        });
+        onError: (ctx) => { 
+            toast.error(ctx.error.message);
+        }
+       }
+    )
     }
 
     const isPending = form.formState.isSubmitting;
@@ -69,10 +76,10 @@ export const LoginForm = () => {
             <Card>
                 <CardHeader className="text-center">
                     <CardTitle>
-                        Welcome Back
+                        Get Started
                     </CardTitle>
                     <CardDescription>
-                        Login to continue
+                        Create an account to get started
                     </CardDescription>
                 </CardHeader>
 
@@ -85,6 +92,9 @@ export const LoginForm = () => {
                                         className="w-full"
                                         type="button"
                                         disabled={isPending}>
+                                        <Image
+                                            src="/logos/github.svg"  alt="Github"
+                                            width={20} height={20} />
                                         Continue with Github
                                     </Button>
 
@@ -92,6 +102,9 @@ export const LoginForm = () => {
                                         className="w-full"
                                         type="button"
                                         disabled={isPending}>
+                                        <Image
+                                            src="/logos/google.svg"  alt="Google"
+                                            width={20} height={20} />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -114,7 +127,7 @@ export const LoginForm = () => {
                                             </FormItem>
                                         )}
                                     />
-                                     <FormField
+                                        <FormField
                                         control={form.control}
                                         name="password"
                                         render={({ field }) => (
@@ -131,24 +144,44 @@ export const LoginForm = () => {
                                             </FormItem>
                                         )}
                                     />
+                                    <FormField
+                                        control={form.control}
+                                        name="confirmPassword"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Confirm Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                    type ="password"
+                                                    placeholder="********"
+                                                    {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
 
                                     <Button type = "submit"
                                     className="w-full" disabled = {isPending}>
-                                        Login
+                                        Sign Up
                                     </Button>     
                                 </div>
 
                                 <div className="text-center text-sm">
-                                    Don't have an account? {" "}
-                                    <Link href="signup"
+                                    Already have an account? {" "}
+                                    <Link href="login"
                                     className="underline underline-offset-4">
-                                        Sign Up
+                                        Log In
                                     </Link>
                                 </div>
                             </div>
+
                         </form>
                     </Form>
                 </CardContent>
+
             </Card>
         </div>
     )
