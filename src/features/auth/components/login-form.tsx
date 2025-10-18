@@ -28,45 +28,38 @@ import {
 
 import { Input } from "@/components/ui/input"
 
-const registerSchema = z.object({
+const loginSchema = z.object({
     email: z.email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(8, "Password must be at least 8 characters")
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"]
+    password: z.string().min(6, "Password must be at least 6 characters")
 });
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type LoginFormValues = z.infer<typeof loginSchema>;
 
-export const RegisterForm = () => {
+export const LoginForm = () => {
     const router = useRouter();
 
-    const form = useForm<RegisterFormValues>({
-        resolver: zodResolver(registerSchema),
+    const form = useForm<LoginFormValues>({
+        resolver: zodResolver(loginSchema),
         defaultValues: {
             email: "",
-            password: "",
-            confirmPassword: ""
+            password: ""
         }
     });
 
-    const onSubmit = async (values: RegisterFormValues) => {
-       await authClient.signUp.email({
-        name: values.email,
-        email: values.email,
-        password: values.password,
-        callbackURL: "/"
-       },
-       {
-        onSuccess: () => {
-            router.push("/");
+    const onSubmit = async (values: LoginFormValues) => {
+         await authClient.signIn.email({
+            email: values.email,
+            password: values.password,
+            callbackURL: "/"
         },
-        onError: (ctx) => { 
-            toast.error(ctx.error.message);
-        }
-       }
-    )
+        {
+            onSuccess: () => {
+                router.push("/");
+            },
+            onError: (ctx) => { 
+                toast.error(ctx.error.message);
+            }
+        });
     }
 
     const isPending = form.formState.isSubmitting;
@@ -76,10 +69,10 @@ export const RegisterForm = () => {
             <Card>
                 <CardHeader className="text-center">
                     <CardTitle>
-                        Get Started
+                        Welcome Back
                     </CardTitle>
                     <CardDescription>
-                        Create an account to get started
+                        Login to continue
                     </CardDescription>
                 </CardHeader>
 
@@ -92,6 +85,9 @@ export const RegisterForm = () => {
                                         className="w-full"
                                         type="button"
                                         disabled={isPending}>
+                                        <Image
+                                            src="/logos/github.svg"  alt="Github"
+                                            width={20} height={20} />
                                         Continue with Github
                                     </Button>
 
@@ -99,6 +95,9 @@ export const RegisterForm = () => {
                                         className="w-full"
                                         type="button"
                                         disabled={isPending}>
+                                        <Image
+                                            src="/logos/google.svg"  alt="Google"
+                                            width={20} height={20} />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -121,7 +120,7 @@ export const RegisterForm = () => {
                                             </FormItem>
                                         )}
                                     />
-                                        <FormField
+                                     <FormField
                                         control={form.control}
                                         name="password"
                                         render={({ field }) => (
@@ -138,44 +137,24 @@ export const RegisterForm = () => {
                                             </FormItem>
                                         )}
                                     />
-                                    <FormField
-                                        control={form.control}
-                                        name="confirmPassword"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>Confirm Password</FormLabel>
-                                                <FormControl>
-                                                    <Input
-                                                    type ="password"
-                                                    placeholder="********"
-                                                    {...field}
-                                                    />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-
 
                                     <Button type = "submit"
                                     className="w-full" disabled = {isPending}>
-                                        Sign Up
+                                        Login
                                     </Button>     
                                 </div>
 
                                 <div className="text-center text-sm">
-                                    Already have an account? {" "}
-                                    <Link href="login"
+                                    Don't have an account? {" "}
+                                    <Link href="signup"
                                     className="underline underline-offset-4">
-                                        Log In
+                                        Sign Up
                                     </Link>
                                 </div>
                             </div>
-
                         </form>
                     </Form>
                 </CardContent>
-
             </Card>
         </div>
     )
