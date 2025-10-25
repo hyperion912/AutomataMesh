@@ -1,4 +1,4 @@
-"use-client"
+"use client"
 
 import {
     AlertDialog,
@@ -14,20 +14,20 @@ import {
 import { authClient } from "@/lib/auth-client";
 
 interface UpgradeModalProps {
-    Open: boolean;
+    open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-export const UpgradeModal = ({ Open, onOpenChange }: UpgradeModalProps) => {
+export const UpgradeModal = ({ open, onOpenChange }: UpgradeModalProps) => {
     return(
-    <AlertDialog open={Open} onOpenChange={onOpenChange}>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
         <AlertDialogContent>
             <AlertDialogHeader>
                 <AlertDialogTitle>
                     Upgrade to Pro
                 </AlertDialogTitle>
             <AlertDialogDescription>
-                You need an active subscription to perform this action Upgrade to Pro to unlock all features.
+                You need an active subscription to perform this action. Upgrade to Pro to unlock all features.
             </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

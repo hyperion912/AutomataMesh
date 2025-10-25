@@ -21,7 +21,7 @@ const Page = async () => {
                 </ErrorBoundary>
 
             </HydrateClient>
-        </WorkflowsContainer>
+    </WorkflowsContainer>
     )
 }
 
