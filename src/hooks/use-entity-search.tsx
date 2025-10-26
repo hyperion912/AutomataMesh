@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { PAGINATION } from "@/config/constants";
-import { set } from "zod";
-import { debounce } from "nuqs";
 
 interface UseEntitySearchProps<T extends { search: string; page: number }> {
     params: T;
