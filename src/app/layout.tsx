@@ -28,6 +28,11 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
+            <script
+                async
+                crossOrigin="anonymous"
+                src="https://tweakcn.com/live-preview.min.js"
+            />
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
