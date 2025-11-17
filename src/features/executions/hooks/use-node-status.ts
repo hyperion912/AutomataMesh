@@ -3,7 +3,7 @@ import { useInngestSubscription } from "@inngest/realtime/hooks";
 import { useEffect, useState } from "react";
 import type { NodeStatus } from "@/components/react-flow/node-status-indicator";
 
-interface UseNoseStatusOptions {
+interface UseNodeStatusOptions {
     nodeId: string;
     channel: string;
     topic: string;
@@ -15,7 +15,7 @@ export function useNodeStatus({
     channel,
     topic,
     refreshToken,
-}: UseNoseStatusOptions) {
+}: UseNodeStatusOptions) {
     const [status, setStatus] = useState<NodeStatus>("initial");
 
     const { data } = useInngestSubscription({

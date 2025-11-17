@@ -9,7 +9,7 @@ export type HttpRequestToken = Realtime.Token<
     ["status"]
 >;
 
-export async function fetchHttpReaquestRealtimeToken(): Promise<HttpRequestToken>
+export async function fetchHttpRequestRealtimeToken(): Promise<HttpRequestToken>
 {
     const token = await getSubscriptionToken(inngest, {
         channel: httpRequestChannel(),

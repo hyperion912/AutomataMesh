@@ -6,7 +6,7 @@ import { memo, useState } from "react";
 import { BaseExecutionNode } from "../base-execution-node";
 import { HttpRequestFormValues, HttpRequestDialog } from "./diaglog";
 import { useNodeStatus } from "../../hooks/use-node-status";
-import { fetchHttpReaquestRealtimeToken } from "./actions";
+import { fetchHttpRequestRealtimeToken } from "./actions";
 import { HTTP_REQUEST_CHANNEL_NAME } from "@/inngest/channels/http-request";
 
 type HttpRequestNodeData = {
@@ -25,7 +25,7 @@ export const HttpRequestNode = memo((props: NodeProps<HttpRequestNodeType>) => {
         nodeId: props.id,
         channel: HTTP_REQUEST_CHANNEL_NAME,
         topic: "status",
-        refreshToken: fetchHttpReaquestRealtimeToken,
+        refreshToken: fetchHttpRequestRealtimeToken,
     });
     const handleOpenSettings = () => {
         setDialogOpen(true);
