@@ -178,7 +178,7 @@ export const AnthropicDialog = ({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Sets the beaviour of the assistant. Use
+                                        Sets the behaviour of the assistant. Use
                                         {" {{variables}}"} for simple values or{" "}
                                         {"{{json variable}}"} to stringify
                                         objects
