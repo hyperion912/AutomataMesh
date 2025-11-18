@@ -53,6 +53,27 @@ const executionNodes: NodeTypeOption[] = [
         description: "Make HTTP requests to external APIs or services.",
         icon: GlobeIcon,
     },
+
+    {
+        type: NodeType.GEMINI,
+        label: "Gemini",
+        description: "Uses Google Gemini to generate text.",
+        icon: "/logos/gemini.svg",
+    },
+
+    {
+        type: NodeType.ANTHROPIC,
+        label: "Anthropic",
+        description: "Uses Anthropic to generate text.",
+        icon: "/logos/anthropic.svg",
+    },
+
+    {
+        type: NodeType.OPENAI,
+        label: "OpenAI",
+        description: "Uses OpenAI to generate text.",
+        icon: "/logos/openai.svg",
+    },
 ];
 
 interface NodeSelectorProps {
