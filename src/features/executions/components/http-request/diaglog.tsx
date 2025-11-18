@@ -40,7 +40,7 @@ const formSchema = z.object({
             message:
                 "Variable name must start with a letter or underscore and contain only letters, numbers, and underscores",
         }),
-    endpoint: z.url({ message: "Please enter a valid URL" }),
+    endpoint: z.string().min(1, { message: "Please enter a valid URL" }),
     method: z.enum(["GET", "POST", "PUT", "PATCH", "DELETE"]),
     body: z.string().optional(),
     // .refine(),
@@ -81,7 +81,7 @@ export const HttpRequestDialog = ({
         }
     }, [open, defaultValues, form]);
     const watchMethod = form.watch("method");
-    const watchVariableName = form.watch("variableName")  || "myApiCall";
+    const watchVariableName = form.watch("variableName") || "myApiCall";
     const showBodyField = ["POST", "PUT", "PATCH"].includes(watchMethod);
 
     const handleSubmit = (values: z.infer<typeof formSchema>) => {
@@ -115,7 +115,9 @@ export const HttpRequestDialog = ({
                                         />
                                     </FormControl>
                                     <FormDescription>
-                                        Use this name to reference the result in subsequent nodes: {`{{${watchVariableName}.httpResponse.data}}`}
+                                        Use this name to reference the result in
+                                        subsequent nodes:{" "}
+                                        {`{{${watchVariableName}.httpResponse.data}}`}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
