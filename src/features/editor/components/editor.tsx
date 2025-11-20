@@ -34,9 +34,7 @@ export const EditorError = () => {
     return <ErrorView message="Failed to load editor." />;
 };
 
-
 export const Editor = ({ workflowId }: { workflowId: string }) => {
-
     const { data: workflow } = useSuspenseWorkflow(workflowId);
 
     const setEditor = useSetAtom(editorAtom);
@@ -63,8 +61,9 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
         []
     );
 
-    const hasManualTrigger = useMemo(()=>{return nodes.some((node)=> node.type === NodeType.MANUAL_TRIGGER)}, [nodes]);
-    
+    const hasManualTrigger = useMemo(() => {
+        return nodes.some((node) => node.type === NodeType.MANUAL_TRIGGER);
+    }, [nodes]);
 
     return (
         <div className="size-full">
@@ -77,16 +76,14 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
                 fitView
                 nodeTypes={nodeComponents}
                 onInit={setEditor}
-                snapGrid={[10,10]}
+                snapGrid={[10, 10]}
                 snapToGrid
                 panOnScroll
                 panOnDrag={false}
                 selectionOnDrag
-                proOptions={
-                    {
-                        hideAttribution: true,
-                    }
-                }   
+                proOptions={{
+                    hideAttribution: true,
+                }}
             >
                 <Background />
                 <Controls />
@@ -94,13 +91,12 @@ export const Editor = ({ workflowId }: { workflowId: string }) => {
                 <Panel position="top-right">
                     <AddNodeButton />
                 </Panel>
-                
-                {hasManualTrigger &&
-                <Panel position="bottom-center">
-                    <ExecuteWorkflowButton workflowId={workflowId} />
-                </Panel>
-                }
 
+                {hasManualTrigger && (
+                    <Panel position="bottom-center">
+                        <ExecuteWorkflowButton workflowId={workflowId} />
+                    </Panel>
+                )}
             </ReactFlow>
         </div>
     );
