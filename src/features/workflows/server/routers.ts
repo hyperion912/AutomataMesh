@@ -9,8 +9,6 @@ import { z } from "zod";
 import { PAGINATION } from "@/config/constants";
 import { NodeType } from "@/generated/prisma";
 import type { Edge, Node } from "@xyflow/react";
-import { da, fr } from "date-fns/locale";
-import { inngest } from "@/inngest/client";
 import { sendWorkflowExecution } from "@/inngest/utils";
 
 export const workflowsRouter = createTRPCRouter({
