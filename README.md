@@ -6,14 +6,16 @@ A powerful visual workflow automation platform that enables users to create, man
 
 ## ✨ Features
 
-- **Visual Workflow Builder** - Drag-and-drop interface powered by React Flow for creating complex automation workflows
-- **Node-Based Architecture** - Modular node system supporting triggers, actions, and integrations
-- **Real-Time Execution** - Background job processing with Inngest for reliable workflow execution
-- **Type-Safe APIs** - End-to-end type safety with tRPC and TypeScript
-- **Authentication & Authorization** - Secure user management with Better Auth (email/password + OAuth)
-- **Subscription Management** - Integrated payment and subscription handling via Polar
-- **AI Integration Ready** - Built-in support for OpenAI, Anthropic, and Google AI SDKs
-- **Error Monitoring** - Comprehensive error tracking with Sentry
+- **Visual Workflow Builder** - Drag-and-drop interface powered by React Flow for creating complex automation workflows.
+- **Node-Based Architecture** - Modular node system supporting a variety of triggers, actions, and integrations.
+- **Real-Time Execution** - Background job processing with Inngest for reliable workflow execution.
+- **Type-Safe APIs** - End-to-end type safety with tRPC and TypeScript.
+- **Authentication & Authorization** - Secure user management with Better Auth (email/password + OAuth).
+- **Subscription Management** - Integrated payment and subscription handling via Polar.
+- **AI Integration Ready** - Built-in support for OpenAI, Anthropic, and Google AI SDKs.
+- **Secure Credential Management** - Encrypted storage for third-party API keys and secrets.
+- **Expanded Trigger & Action Library** - Includes nodes for webhooks, Stripe events, Discord, Slack, and more.
+- **Error Monitoring** - Comprehensive error tracking with Sentry.
 
 ## 🛠️ Tech Stack
 
@@ -133,20 +135,22 @@ The application uses PostgreSQL with Prisma ORM. Key models include:
 
 | Model | Purpose | Key Relationships |
 |-------|---------|-------------------|
-| **User** | User accounts and profiles | → Sessions, Accounts, Workflows |
-| **Session** | Active user sessions | → User |
-| **Account** | OAuth provider accounts | → User |
-| **Workflow** | Workflow definitions | → User, Nodes, Connections |
-| **Node** | Individual workflow nodes | → Workflow |
-| **Connection** | Connections between nodes | → Workflow, Nodes |
-| **Verification** | Email verification tokens | - |
+| **User** | User accounts and profiles | → Sessions, Accounts, Workflows, Credentials |
+| **Session**| Active user sessions | → User |
+| **Account**| OAuth provider accounts | → User |
+| **Workflow**| Workflow definitions | → User, Nodes, Connections, Executions |
+| **Node**| Individual workflow nodes | → Workflow, Credential |
+| **Connection**| Connections between nodes| → Workflow, Nodes |
+| **Credential**| Securely stored API keys and secrets | → User, Node |
+| **Execution**| Records of workflow runs | → Workflow |
 
 ### Node Types
 
 Currently supported node types:
-- `INITIAL` - Starting node for every workflow
-- `MANUAL_TRIGGER` - Manually triggered workflow execution
-- `HTTP_REQUEST` - HTTP API request node
+- **Triggers**: `MANUAL_TRIGGER`, `HTTP_REQUEST`, `GOOGLE_FORM_TRIGGER`, `STRIPE_TRIGGER`
+- **Actions**: `DISCORD`, `SLACK`
+- **AI**: `OPENAI`, `ANTHROPIC`, `GEMINI`
+- **Internal**: `INITIAL` (starting node for every workflow)
 
 More node types are in development.
 
@@ -165,6 +169,7 @@ Create a `.env` file in the root directory with the following variables:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | ✅ | PostgreSQL connection string |
+| `ENCRYPTION_KEY` | ✅ | Secret for encrypting credentials (generate with `openssl rand -base64 32`)|
 | `BETTER_AUTH_SECRET` | ✅ | Secret key for authentication (generate with `openssl rand -base64 32`) |
 | `BETTER_AUTH_URL` | ✅ | Application base URL (e.g., `http://localhost:3000`) |
 | `POLAR_ACCESS_TOKEN` | ✅ | Polar API access token |
@@ -183,6 +188,7 @@ Create a `.env` file in the root directory with the following variables:
 Example `.env` file:
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/automatamesh"
+ENCRYPTION_KEY="your-encryption-key-here"
 BETTER_AUTH_SECRET="your-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000"
 POLAR_ACCESS_TOKEN="polar_xxx"
@@ -229,7 +235,7 @@ INNGEST_SIGNING_KEY="signkey_xxx"
    ```bash
    npm run dev:all
    ```
-   This starts both the Next.js dev server and Inngest dev server simultaneously.
+   This starts the Next.js dev server, Inngest dev server, and an ngrok tunnel.
 
    **Option B: Run services separately**
    
@@ -291,18 +297,17 @@ The workflow editor is built with **React Flow**, providing a powerful and flexi
 - **React Flow** internal state for workflow editor
 
 ## 🔄 Current Development Status
-
 | Feature | Status | Notes |
-|---------|--------|-------|
-| User Authentication | ✅ Complete | Email/password + OAuth support |
+|---------|---------|------|
+| User Authentication | ✅ Complete | Email/password + OAuth support (Google, GitHub) |
 | Visual Workflow Editor | ✅ Complete | Drag-and-drop interface |
-| Database Schema | ✅ Complete | User, Workflow, Node, Connection models |
-| Basic Node Types | ✅ Complete | Initial, Manual Trigger, HTTP Request |
-| Background Processing | 🚧 In Progress | Inngest integration for workflow execution |
-| Workflow Execution Engine | 🚧 In Progress | Node execution and data flow |
-| Additional Node Types | 📋 Planned | Webhooks, schedules, transformations, etc. |
-| Credentials Management | 📋 Planned | Secure storage for API keys and secrets |
-| Execution History | 📋 Planned | View and debug past workflow runs |
+| Database Schema | ✅ Complete | Core models for users, workflows, nodes, etc. |
+| Expanded Node Library | ✅ Complete | Triggers, actions, and all AI nodes are implemented |
+| AI Integrations | ✅ Complete | Support for OpenAI, Anthropic, and Google AI |
+| Background Processing | ✅ Complete | Inngest integration for workflow execution |
+| Workflow Execution Engine | ✅ Complete | Node execution logic and data flow |
+| Credentials Management | ✅ Complete | Secure storage for API keys and secrets |
+| Execution History | ✅ Complete | View and debug past workflow runs |
 | API Integrations | 📋 Planned | Pre-built integrations with popular services |
 | Workflow Templates | 📋 Planned | Ready-to-use workflow templates |
 
