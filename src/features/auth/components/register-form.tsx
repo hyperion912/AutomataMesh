@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import  Image  from "next/image"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { authClient } from "@/lib/auth-client"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { authClient } from "@/lib/auth-client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
-    CardTitle
-} from "@/components/ui/card"
+    CardTitle,
+} from "@/components/ui/card";
 
 import {
     Form,
@@ -23,19 +23,23 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage
-} from "@/components/ui/form"
+    FormMessage,
+} from "@/components/ui/form";
 
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 
-const registerSchema = z.object({
-    email: z.email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters"),
-    confirmPassword: z.string().min(8, "Password must be at least 8 characters")
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"]
-});
+const registerSchema = z
+    .object({
+        email: z.email("Invalid email address"),
+        password: z.string().min(8, "Password must be at least 8 characters"),
+        confirmPassword: z
+            .string()
+            .min(8, "Password must be at least 8 characters"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
@@ -47,27 +51,59 @@ export const RegisterForm = () => {
         defaultValues: {
             email: "",
             password: "",
-            confirmPassword: ""
-        }
+            confirmPassword: "",
+        },
     });
+    const signInGithub = async () => {
+        const data = await authClient.signIn.social(
+            {
+                provider: "github",
+            },
+            {
+                onSuccess: () => {
+                    router.push("/");
+                },
+                onError: () => {
+                    toast.error("Something went wrong");
+                },
+            }
+        );
+    };
+
+    const signInGoogle = async () => {
+        const data = await authClient.signIn.social(
+            {
+                provider: "google",
+            },
+            {
+                onSuccess: () => {
+                    router.push("/");
+                },
+                onError: () => {
+                    toast.error("Something went wrong");
+                },
+            }
+        );
+    };
 
     const onSubmit = async (values: RegisterFormValues) => {
-       await authClient.signUp.email({
-        name: values.email,
-        email: values.email,
-        password: values.password,
-        callbackURL: "/"
-       },
-       {
-        onSuccess: () => {
-            router.push("/");
-        },
-        onError: (ctx) => { 
-            toast.error(ctx.error.message);
-        }
-       }
-    )
-    }
+        await authClient.signUp.email(
+            {
+                name: values.email,
+                email: values.email,
+                password: values.password,
+                callbackURL: "/",
+            },
+            {
+                onSuccess: () => {
+                    router.push("/");
+                },
+                onError: (ctx) => {
+                    toast.error(ctx.error.message);
+                },
+            }
+        );
+    };
 
     const isPending = form.formState.isSubmitting;
 
@@ -75,9 +111,7 @@ export const RegisterForm = () => {
         <div className="flex flex-col gap-6">
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle>
-                        Get Started
-                    </CardTitle>
+                    <CardTitle>Get Started</CardTitle>
                     <CardDescription>
                         Create an account to get started
                     </CardDescription>
@@ -88,23 +122,35 @@ export const RegisterForm = () => {
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <div className="grid gap-6">
                                 <div className="flex flex-col gap-4">
-                                    <Button variant="outline"
+                                    <Button
+                                        onClick={signInGithub}
+                                        variant="outline"
                                         className="w-full"
                                         type="button"
-                                        disabled={isPending}>
+                                        disabled={isPending}
+                                    >
                                         <Image
-                                            src="/logos/github.svg"  alt="Github"
-                                            width={20} height={20} />
+                                            src="/logos/github.svg"
+                                            alt="Github"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Github
                                     </Button>
 
-                                    <Button variant="outline"
+                                    <Button
+                                        onClick={signInGoogle}
+                                        variant="outline"
                                         className="w-full"
                                         type="button"
-                                        disabled={isPending}>
+                                        disabled={isPending}
+                                    >
                                         <Image
-                                            src="/logos/google.svg"  alt="Google"
-                                            width={20} height={20} />
+                                            src="/logos/google.svg"
+                                            alt="Google"
+                                            width={20}
+                                            height={20}
+                                        />
                                         Continue with Google
                                     </Button>
                                 </div>
@@ -118,16 +164,16 @@ export const RegisterForm = () => {
                                                 <FormLabel>Email</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                    type ="email"
-                                                    placeholder="abc@gmail.com"
-                                                    {...field}
+                                                        type="email"
+                                                        placeholder="abc@gmail.com"
+                                                        {...field}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
                                     />
-                                        <FormField
+                                    <FormField
                                         control={form.control}
                                         name="password"
                                         render={({ field }) => (
@@ -135,9 +181,9 @@ export const RegisterForm = () => {
                                                 <FormLabel>Password</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                    type ="password"
-                                                    placeholder="********"
-                                                    {...field}
+                                                        type="password"
+                                                        placeholder="********"
+                                                        {...field}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -149,12 +195,14 @@ export const RegisterForm = () => {
                                         name="confirmPassword"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Confirm Password</FormLabel>
+                                                <FormLabel>
+                                                    Confirm Password
+                                                </FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                    type ="password"
-                                                    placeholder="********"
-                                                    {...field}
+                                                        type="password"
+                                                        placeholder="********"
+                                                        {...field}
                                                     />
                                                 </FormControl>
                                                 <FormMessage />
@@ -162,28 +210,29 @@ export const RegisterForm = () => {
                                         )}
                                     />
 
-
-                                    <Button type = "submit"
-                                    className="w-full" disabled = {isPending}>
+                                    <Button
+                                        type="submit"
+                                        className="w-full"
+                                        disabled={isPending}
+                                    >
                                         Sign Up
-                                    </Button>     
+                                    </Button>
                                 </div>
 
                                 <div className="text-center text-sm">
-                                    Already have an account? {" "}
-                                    <Link href="login"
-                                    className="underline underline-offset-4">
+                                    Already have an account?{" "}
+                                    <Link
+                                        href="login"
+                                        className="underline underline-offset-4"
+                                    >
                                         Log In
                                     </Link>
                                 </div>
                             </div>
-
                         </form>
                     </Form>
                 </CardContent>
-
             </Card>
         </div>
-    )
-
-}
+    );
+};
