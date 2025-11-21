@@ -86,7 +86,7 @@ export const EntityHeader = ({
 type EntityContainerProps = {
     children: React.ReactNode;
     header: React.ReactNode;
-    search: React.ReactNode;
+    search?: React.ReactNode;
     pagination: React.ReactNode;
 };
 

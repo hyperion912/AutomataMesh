@@ -149,7 +149,7 @@ export const CredentialItem = ({ data }: { data: Credential }) => {
                 </>
             }
             image={
-                <div className="size=8 flex items-center justify-center">
+                <div className="size-8 flex items-center justify-center">
                     <Image src={logo} alt={data.type} width={20} height={20} />
                 </div>
             }

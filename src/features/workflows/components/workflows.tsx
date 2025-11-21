@@ -159,7 +159,7 @@ export const WorkflowItem = ({ data }: { data: Workflow }) => {
             title={data.name}
             subtitle={<> Updated {formatDistanceToNow(data.updatedAt, {addSuffix: true})} {" "} &bull; Created {formatDistanceToNow(data.createdAt, {addSuffix: true})}</>}
             image={
-                <div className="size=8 flex items-center justify-center">
+                <div className="size-8 flex items-center justify-center">
                     <WorkflowIcon className="size-5 text-muted-foreground "/>
                 </div>
             }
