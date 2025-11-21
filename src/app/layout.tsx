@@ -4,6 +4,7 @@ import { TRPCReactProvider } from "../trpc/client";
 import { Toaster } from "@/components/ui/sonner";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Provider } from "jotai";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description: "Automate with lightning speed",
     icons: {
         icon: "/logos/logo.svg",
-    }
+    },
 };
 
 export default function RootLayout({
@@ -39,6 +40,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
+                <Analytics />
                 <TRPCReactProvider>
                     <NuqsAdapter>
                         <Provider>{children}</Provider>
