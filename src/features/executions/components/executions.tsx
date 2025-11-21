@@ -136,7 +136,7 @@ export const ExecutionItem = ({
             title={formatStatus(data.status)}
             subtitle={subtitle}
             image={
-                <div className="size=8 flex items-center justify-center">
+                <div className="size-8 flex items-center justify-center">
                     {getStatusIcon(data.status)}
                 </div>
             }
